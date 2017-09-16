@@ -1,6 +1,8 @@
 #include<stdio.h>
-#include <stdbool.h>
-#include <string.h>
+#include<string.h>
+#include<stdlib.h>
+#include<stdbool.h>
+
 
 
 #define maxKol 100
@@ -8,7 +10,7 @@
 #define maxStr 100
 #define ACCEPTED "ACCEPTED"
 #define REJECTED "REJECTED"
-#define INVALID "#INVALID#"
+#define INVALID "INVALID INPUT"
 
 
 typedef struct {
@@ -31,21 +33,82 @@ typedef struct {
   char tab[maxBar][maxStr];
 } SessionState;
 
-void readTransTable(TransTab *T){
-  // TODO : make matriks from inputs
-  int i; //row
-  int j; //column
-  printf("input row: "); scanf("%d",&(*T).nBaris );
-  printf("input column: "); scanf("%d",&(*T).nKolom );
+void openFile (FILE **f){
+  char filename[1000];
+  printf("input file name: ");scanf("%s",&filename );
 
+  *f = fopen(filename,"r");
+
+}
+
+void readTransTable(TransTab *T, FILE * f){
+  // TODO : make matriks from inputs
+  int i=0; //row
+  int j=0;
+  int count=0; //column
+  char buf[1000];
+  bool loadFail=false;
+
+  //EXPECT INPUT
+  fscanf(f,"%s",buf);
+  if (strcmp(buf,"NUMBER_OF_INPUT")==0){
+    fscanf(f,"%s",buf);
+    strtol(buf,NULL,10);
+    (*T).nKolom = (int) strtol(buf,NULL,10);
+  }
+  else {
+    loadFail = true;
+  }
+
+// EXPECT STATE
+  fscanf(f,"%s",buf);
+  if (strcmp(buf,"NUMBER_OF_STATE")==0){
+    fscanf(f,"%s",buf);
+    strtol(buf,NULL,10);
+    (*T).nBaris = (int) strtol(buf,NULL,10);
+  }
+  else {
+    loadFail = true;
+  }
+
+//EXPECT DFATABLE
+  fscanf(f,"%s",buf);
+  if (strcmp(buf,"DFA_TABLE")==0){
   for (i = 0; i<= (*T).nBaris; i++){
     for (j = 0; j<=  (*T).nKolom; j++ ){
-          scanf("%s",&(*T).tab[i][j]);
+          fscanf(f,"%s",buf);
+          strcpy((*T).tab[i][j],buf);
         }
     }
-  printf("number of final states : ");scanf("%d",&(*T).nFinalState);
-  for (i = 0; i < (*T).nFinalState; i++) {
-    scanf("%s",&(*T).finalTab[i]);
+  }
+  else{
+    loadFail = true;
+  }
+
+  fscanf(f,"%s",buf);
+  if (strcmp(buf,"NUMBER_OF_FINAL_STATE")==0){
+    fscanf(f,"%s",buf);
+    strtol(buf,NULL,10);
+    (*T).nFinalState = (int) strtol(buf,NULL,10);
+  }
+  else {
+    loadFail = true;
+  }
+
+  fscanf(f,"%s",buf);
+  if (strcmp(buf,"FINAL_STATE")==0){
+    for (i = 0; i < (*T).nFinalState; i++) {
+      fscanf(f,"%s",buf);
+      strcpy((*T).finalTab[i],buf);
+    }
+  }
+  else {
+    loadFail = true;
+  }
+
+  if (loadFail==true){
+    printf("Invalid file format\n");
+    exit(0);
   }
 
 }
@@ -58,9 +121,14 @@ void writeTransTable(TransTab T){
 
   for (i = 0; i<= (T).nBaris; i++){
     for (j = 0; j<= (T).nKolom; j++ ){
-        printf("%s",(T).tab[i][j]);
+        if (i==0 && j==0){
+          printf("_");
+        }
+        else {
+          printf("%s",(T).tab[i][j]);
+        }
         if (j!=(T).nKolom){
-          printf(" ");
+          printf(" | ");
         }
       }
 
@@ -138,7 +206,7 @@ void simulateDFA(Inputs IN, TransTab T, SessionState * S){
   (*S).status = INVALID;
 
   strcpy((*S).tab[nIn],currentState);
-  while ((nIn<=(IN).nInputs) && (strcmp(currentState,INVALID)!=0) ){
+  while (nIn<=(IN).nInputs){
     currentState = transFunction((IN).tab[nIn],currentState,T);
     nIn++;
     strcpy((*S).tab[nIn],currentState);
@@ -170,28 +238,29 @@ void writeSessionState(SessionState S){
   else if (strcmp((S).status,INVALID)==0){
     printf("%s", INVALID);
   }
+
   else {
     printf("%s",ACCEPTED);
-  }
-  printf("\n" );
-    for (i = 0; i < (S).nState; i++) {
-      printf("%s",(S).tab[i]);
-      if (i!= (S).nState-1){
-        printf(" --> ");
+    printf("\n" );
+      for (i = 0; i < (S).nState; i++) {
+        printf("%s",(S).tab[i]);
+        if (i!= (S).nState-1){
+          printf(" --> ");
+      }
     }
-
   }
 
 }
 
 
 int main(){
+  FILE * f;
   TransTab T;
   Inputs IN;
   SessionState S;
   //variables
-
-  readTransTable(&T);printf("\n");
+  openFile(&f);
+  readTransTable(&T,f);printf("\n");
   writeTransTable(T); printf("\n");
   readInputs(&IN);printf("\n");
   writeInputs(IN); printf("\n");
