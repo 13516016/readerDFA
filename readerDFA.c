@@ -147,9 +147,9 @@ void simulateDFA(Inputs IN, TransTab T, SessionState * S){
   (*S).nState = nIn;
 
 
-  if (strcmp((*S).tab[nIn]-1,INVALID)!=0){
+  if (strcmp((*S).tab[nIn-1],INVALID)!=0){
     for (i = 0; i < (*S).nState; i++) {
-      if (strcmp((T).finalTab[i],(*S).tab[nIn])==0) {
+      if (strcmp((T).finalTab[i],(*S).tab[nIn-1])==0) {
         (*S).status = ACCEPTED;
         break;
       }
