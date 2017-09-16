@@ -254,18 +254,21 @@ void writeSessionState(SessionState S){
 
 
 int main(){
+  //variables
   FILE * f;
   TransTab T;
   Inputs IN;
   SessionState S;
-  //variables
+
   openFile(&f);
   readTransTable(&T,f);printf("\n");
-  writeTransTable(T); printf("\n");
+  writeTransTable(T);
+  printf("\n");
+  printf("\n");
+
   readInputs(&IN);printf("\n");
-  writeInputs(IN); printf("\n");
+
   simulateDFA(IN,T,&S);
   writeSessionState(S);printf("\n" );
 
-  // printf("%s\n",transFunction((IN).tab[0],(T).tab[0][1],T));
 }
