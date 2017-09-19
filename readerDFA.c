@@ -5,9 +5,9 @@
 
 
 
-#define maxKol 100
-#define maxBar 100
-#define maxStr 100
+#define maxKol 50
+#define maxBar 50
+#define maxStr 50
 #define ACCEPTED "ACCEPTED"
 #define REJECTED "REJECTED"
 #define INVALID "INVALID INPUT"

@@ -1,13 +1,14 @@
 NUMBER_OF_INPUT
-3
+4
 NUMBER_OF_STATE
-3
+4
 DFA_TABLE
-_ bind connect listen
-Q R S S
+_ bind connect listen write 
+Q R S S  
 R S Q Q
 S S R Q
+T 
 NUMBER_OF_FINAL_STATE
-2
+3
 FINAL_STATE
-R S
+R S T
