@@ -4,11 +4,11 @@ NUMBER_OF_STATE
 4
 DFA_TABLE
 _ bind connect listen write 
-Q R S S  
-R S Q Q
-S S R Q
-T 
+Q R S S T
+R S Q Q S
+S S R Q T
+T Q R T S
 NUMBER_OF_FINAL_STATE
 3
 FINAL_STATE
-R S T
+R S 
