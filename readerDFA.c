@@ -216,12 +216,13 @@ void simulateDFA(Inputs IN, TransTab T, SessionState * S){
 
 
   if (strcmp((*S).tab[nIn-1],INVALID)!=0){
-    for (i = 0; i < (*S).nState; i++) {
-      if (strcmp((T).finalTab[i],(*S).tab[nIn-1])==0) {
+    for (i = 0; i < (T).nFinalState; i++) {
+      if (strcmp((*S).tab[nIn-1],(T).finalTab[i])==0) {
         (*S).status = ACCEPTED;
         break;
       }
       else {
+
         (*S).status = REJECTED;
       }
     }
@@ -242,14 +243,14 @@ void writeSessionState(SessionState S){
   else {
     printf("%s",ACCEPTED);
     printf("\n" );
-      for (i = 0; i < (S).nState; i++) {
-        printf("%s",(S).tab[i]);
-        if (i!= (S).nState-1){
-          printf(" --> ");
-      }
+    for (i = 0; i < (S).nState; i++) {
+      printf("%s",(S).tab[i]);
+      if (i!= (S).nState-1){
+        printf(" --> ");
+
+  }
     }
   }
-
 }
 
 
@@ -262,9 +263,9 @@ int main(){
 
   openFile(&f);
   readTransTable(&T,f);printf("\n");
-  writeTransTable(T);
+  // writeTransTable(T);
   printf("\n");
-  printf("\n");
+  // printf("\n");
 
   readInputs(&IN);printf("\n");
 
