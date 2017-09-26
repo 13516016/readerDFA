@@ -242,13 +242,12 @@ void writeSessionState(SessionState S){
 
   else {
     printf("%s",ACCEPTED);
-    printf("\n" );
-    for (i = 0; i < (S).nState; i++) {
-      printf("%s",(S).tab[i]);
-      if (i!= (S).nState-1){
-        printf(" --> ");
-
   }
+  printf("\n" );
+  for (i = 0; i < (S).nState; i++) {
+    printf("%s",(S).tab[i]);
+    if (i!= (S).nState-1){
+      printf(" --> ");
     }
   }
 }
