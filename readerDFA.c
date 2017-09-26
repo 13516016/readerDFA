@@ -262,9 +262,6 @@ int main(){
 
   openFile(&f);
   readTransTable(&T,f);printf("\n");
-  // writeTransTable(T);
-  printf("\n");
-  // printf("\n");
 
   readInputs(&IN);printf("\n");
 
